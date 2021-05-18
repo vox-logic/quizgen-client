@@ -1,33 +1,46 @@
-import Axios, { AxiosInstance } from "axios";
+import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { hosts } from "./utils/data";
 
 export class QuizClient {
   // Private axios instance for internal requests
   private axios: AxiosInstance;
-  private token: string;
+  private defaultConfig: AxiosRequestConfig;
 
   /**
    * @param  {string} token Your API token that you can retrieve from your account page (https://quizgen.ai/account/keys)
    */
   constructor(token: string) {
-    this.token = token;
     this.axios = Axios;
+    this.defaultConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
   }
   /**
    * @param  {string} text The source text to generate a quiz from
-   * @param  {number} number The number of questions to retrieve from generated (If more than limit was specified, top N quesitons are returned)
+   * @param  {number} numQuestions The number of questions to retrieve from generated (If more than limit was specified, top N quesitons are returned)
    */
-  async getQuiz(text: string, numQuestions: number) {
+  async generateQuiz(text: string, numQuestions: number) {
     const r = await this.axios.post(
       `${hosts.quizgen}/api/generate-quiz`,
-      { text },
+      { text, numQuestions },
       {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
+        ...this.defaultConfig,
       }
     );
 
-    console.log({ data: r.data });
+    return r.data;
+  }
+  /**
+   * @param  {string} quizId Quiz ID you received on generation
+   */
+  async getQuiz(quizId: string) {
+    const r = await this.axios.get(`${hosts.quizgen}/api/quiz`, {
+      ...this.defaultConfig,
+      params: { quiz_id: quizId },
+    });
+
+    return r.data;
   }
 }

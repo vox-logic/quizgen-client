@@ -1,9 +1,9 @@
 {
   "name": "@vox-logic/quizgen",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Helper library for interacting with the Question Generation API",
   "main": "dist/index.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "/dist"
   ],

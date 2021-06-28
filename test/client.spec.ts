@@ -8,6 +8,6 @@ describe("ClientTests", () => {
   );
   it("should return the test quiz for `getQuiz`", async () => {
     const resQuiz = await client.getQuiz("0wZATXkB21L_We4I37_i");
-    assert.deepEqual(testQuiz, resQuiz);
+    assert.deepEqual(testQuiz.quiz, resQuiz);
   });
 });
